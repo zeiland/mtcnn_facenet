@@ -25,7 +25,6 @@ def saveFaces(results , image_input):
                 img_blank[i][j] = image_input[bounding_box[1]+i][bounding_box[0]+j]
                 image_input[bounding_box[1]+i][bounding_box[0]+j] = 0
 
-
         
         img_resize = cv2.resize(img_blank,(face_size,face_size))
         cv2.imwrite(TEST_PIC_DIR + str(number) + ".jpg", img_resize)   #set the path of saving faces, but no Chinese path
