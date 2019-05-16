@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 
-from mtcnn.mtcnn import MTCNN
+from path_settings import *
+from mtcnn import MTCNN
 import numpy as np
 import Split_slice_detect 
 import cut_out_detect
 from compare_result import compare
-from Lib_complete import lib_complete
+from lib_process import lib_complete
 from test_pkl_calculate import test_pkl_lib_add
-from path_settings import *
 from PIL import Image
 import cv2
 import brightness_and_contrast
@@ -48,16 +48,15 @@ results = detector.detect_faces(image)
 
 
 #分块识别
-Split_slice_detect.slice_n_detect(image , detector , 1)
+#Split_slice_detect.slice_n_detect(image , detector , 1)
 #Split_slice_detect.slice_n_detect(image , detector , 2)
-#Split_slice_detect.slice_n_detect(image , detector , 3)
-
+#Split_slice_detect.slice_n_detect(image , detector , 3#
 
 #截脸识别
 #cut_out_detect.cut_out_saveFaces(results , image, detector)
 
 
-print(len(os.listdir(TEST_PIC_DIR)))
+#print(len(os.listdir(TEST_PIC_DIR)))
 #test_pkl_lib_add()            #complete pkl_file of test faces
 #unpresent=compare()           #compare the pkl_file in lib and test
 #for i in unpresent:
