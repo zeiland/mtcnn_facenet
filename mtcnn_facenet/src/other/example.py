@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from path_settings import *
+
+from mtcnn.mtcnn import MTCNN
 import numpy as np
 import Split_slice_detect 
 import cut_out_detect
 from compare_result import compare
 from Lib_complete import lib_complete
 from test_pkl_calculate import test_pkl_lib_add
+from path_settings import *
 from PIL import Image
 import cv2
-from mtcnn import MTCNN
-
+import brightness_and_contrast
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -29,20 +30,34 @@ def del_file(path):
 
 del_file(TEST_PIC_DIR)            #clear all saved test file before adding new file 
 del_file(TEST_PKL_DIR)
-lib_complete()                #complete pkl_file of face_lib when new faces add into lib
+#lib_complete()                #complete pkl_file of face_lib when new faces add into lib
 
 
 detector = MTCNN()
 image = cv2.imread(TEST_FILE)
 results = detector.detect_faces(image)
+
+#亮度调整
+#gamma = 0.8  #小于1变亮，大于1变暗
+#image = brightness_and_contrast.brightness_mod(image , gamma)
+#对比度调整
+#enhance_fact = 1.5  #增强因子为0.0将产生纯灰色图像；为1.0将保持原始图像
+#image = brightness_and_contrast.contrast(image , enhance_fact)
+
+#cv2.imwrite('D:\\test1.jpg' , image)
+
+
 #分块识别
-#Split_slice_detect.saveFaces(results , image)
-#Split_slice_detect.slice_2_detect(image)
-#Split_slice_detect.slice_3_detect(image)
+Split_slice_detect.slice_n_detect(image , detector , 1)
+#Split_slice_detect.slice_n_detect(image , detector , 2)
+#Split_slice_detect.slice_n_detect(image , detector , 3)
+
 
 #截脸识别
-cut_out_detect.cut_out_saveFaces(results , image)
+#cut_out_detect.cut_out_saveFaces(results , image, detector)
 
+
+print(len(os.listdir(TEST_PIC_DIR)))
 #test_pkl_lib_add()            #complete pkl_file of test faces
 #unpresent=compare()           #compare the pkl_file in lib and test
 #for i in unpresent:
