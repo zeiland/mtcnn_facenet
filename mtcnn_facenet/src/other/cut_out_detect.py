@@ -67,7 +67,6 @@ def cut_out_saveFaces(results , image, detector):
                 for j in range(image_size[1]) :
                     image_cut[j][i] = image[j][column_reserved[i]]
             #cv2.imwrite(TEST_PIC_DIR + "cut.jpg", image_cut)
-
                                                                                                 #detect again in image_cut
 
             results_again = detector.detect_faces(image_cut)
