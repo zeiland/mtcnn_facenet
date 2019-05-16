@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\mtcnn_facenet",
+    "\\mtcnn_facenet\\src",
+    "\\mtcnn_facenet\\src\\facenet"
+  ],
+  "SelectedNode": "\\mtcnn_facenet\\src\\facenet\\facenet.py",
+  "PreviewInSolutionExplorer": false
+}

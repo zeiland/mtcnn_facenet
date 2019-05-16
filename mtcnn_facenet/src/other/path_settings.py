@@ -1,4 +1,11 @@
 import os
+import sys
+
+
+SYS_DIR = os.path.dirname(__file__) 
+SYS_DIR = os.path.dirname(SYS_DIR)
+sys.path.append(os.path.join(SYS_DIR,"mtcnn\\mtcnn"))
+sys.path.append(os.path.join(SYS_DIR, "facenet"))
 
 DATA_DIR = os.path.dirname(__file__)  
 DATA_DIR = os.path.dirname(DATA_DIR)

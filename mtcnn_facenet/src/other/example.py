@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
-sys.path.append("D:\\VS2017\\source\\repos\\mtcnn_facenet\\mtcnn_facenet\\src\\mtcnn\\mtcnn")
-sys.path.append("D:\\VS2017\\source\\repos\\mtcnn_facenet\\mtcnn_facenet\\src\\facenet")
-
+from path_settings import *
 import numpy as np
 import Split_slice_detect 
 import cut_out_detect
 from compare_result import compare
 from Lib_complete import lib_complete
 from test_pkl_calculate import test_pkl_lib_add
-from path_settings import *
 from PIL import Image
 import cv2
 from mtcnn import MTCNN
