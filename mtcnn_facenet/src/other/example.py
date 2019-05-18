@@ -28,14 +28,23 @@ def del_file(path):
             os.remove(c_path)
 
 
-del_file(TEST_PIC_DIR)            #clear all saved test file before adding new file 
-del_file(TEST_PKL_DIR)
+#detector = MTCNN()
+
 #lib_complete()                #complete pkl_file of face_lib when new faces add into lib
 
+filename_external = os.listdir(TEST_FILE)
+for i in range(len(filename_external)) :
+    filename_internal = os.listdir(TEST_FILE + filename_external[i])
+    for j in range(len(filename_internal)) :
+        TEST_FILE_NAME = TEST_FILE + filename_external[i] + "\\" + filename_internal[j]
+        print(TEST_FILE_NAME)
+        #del_file(TEST_PIC_DIR)            #clear all saved test file before adding new file 
+        #del_file(TEST_PKL_DIR)
+        #image = cv2.imread(TEST_FILE_NAME)
+        #results = detector.detect_faces(image)
+        detect_face_num = len(os.listdir(TEST_PIC_DIR))
 
-detector = MTCNN()
-image = cv2.imread(TEST_FILE)
-results = detector.detect_faces(image)
+
 
 #亮度调整
 #gamma = 0.8  #小于1变亮，大于1变暗
@@ -56,7 +65,7 @@ results = detector.detect_faces(image)
 #cut_out_detect.cut_out_saveFaces(results , image, detector)
 
 
-#print(len(os.listdir(TEST_PIC_DIR)))
+
 #test_pkl_lib_add()            #complete pkl_file of test faces
 #unpresent=compare()           #compare the pkl_file in lib and test
 #for i in unpresent:
