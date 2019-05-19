@@ -37,13 +37,26 @@ for i in range(len(filename_external)) :
     filename_internal = os.listdir(TEST_FILE + filename_external[i])
     for j in range(len(filename_internal)) :
         TEST_FILE_NAME = TEST_FILE + filename_external[i] + "\\" + filename_internal[j]
-        print(TEST_FILE_NAME)
+        #print(TEST_FILE_NAME)
         #del_file(TEST_PIC_DIR)            #clear all saved test file before adding new file 
         #del_file(TEST_PKL_DIR)
         #image = cv2.imread(TEST_FILE_NAME)
         #results = detector.detect_faces(image)
-        detect_face_num = len(os.listdir(TEST_PIC_DIR))
+        #detect_face_num = len(os.listdir(TEST_PIC_DIR))
 
+        with open(DATA_DIR + "\\wider_face_val_bbx_gt_new.txt" , 'rb') as face_num_file:
+            file_context = face_num_file.read().decode('utf-8')
+            photo_name = filename_external[i] + "/" + filename_internal[j]
+            print(photo_name)
+            face_index = file_context.find(photo_name)
+            str_face_num = ''
+            for k in range(2,6) :                        
+                next_char = file_context[face_index + len(photo_name) + k]         
+                if next_char == '\n' or next_char == '\r' or next_char == '':
+                    break
+                str_face_num += next_char
+        actual_face_num = int(str_face_num)
+        print(actual_face_num)
 
 
 #亮度调整
