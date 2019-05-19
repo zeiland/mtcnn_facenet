@@ -28,21 +28,23 @@ def del_file(path):
             os.remove(c_path)
 
 
-#detector = MTCNN()
+detector = MTCNN()
 
 #lib_complete()                #complete pkl_file of face_lib when new faces add into lib
-
+with open('D:\\test.txt' , 'w') as data_txt :
+    data_txt.write('photo name' + '\n' + 'actual face num' + '\t' + 'detect face num' + '\n')
 filename_external = os.listdir(TEST_FILE)
 for i in range(len(filename_external)) :
     filename_internal = os.listdir(TEST_FILE + filename_external[i])
     for j in range(len(filename_internal)) :
         TEST_FILE_NAME = TEST_FILE + filename_external[i] + "\\" + filename_internal[j]
         #print(TEST_FILE_NAME)
-        #del_file(TEST_PIC_DIR)            #clear all saved test file before adding new file 
-        #del_file(TEST_PKL_DIR)
-        #image = cv2.imread(TEST_FILE_NAME)
-        #results = detector.detect_faces(image)
-        #detect_face_num = len(os.listdir(TEST_PIC_DIR))
+        del_file(TEST_PIC_DIR)            #clear all saved test file before adding new file 
+        del_file(TEST_PKL_DIR)
+        image = cv2.imread(TEST_FILE_NAME)
+        results = detector.detect_faces(image)
+        Split_slice_detect.saveFaces(results , image)
+        detect_face_num = len(os.listdir(TEST_PIC_DIR))
 
         with open(DATA_DIR + "\\wider_face_val_bbx_gt_new.txt" , 'rb') as face_num_file:
             file_context = face_num_file.read().decode('utf-8')
@@ -56,7 +58,9 @@ for i in range(len(filename_external)) :
                     break
                 str_face_num += next_char
         actual_face_num = int(str_face_num)
-        print(actual_face_num)
+        with open('D:\\test.txt' , 'a') as data_txt :
+            data_txt.write(photo_name + '\n' + str_face_num + '\t' + str(detect_face_num) + '\n')
+        
 
 
 #亮度调整
