@@ -48,6 +48,23 @@ for i in range(len(filename_external)) :
         #print(TEST_FILE_NAME)
         del_file(TEST_PIC_DIR)            #clear all saved test file before adding new file 
         #del_file(TEST_PKL_DIR)
+
+
+        with open(FACE_NUM_LIST , 'rb') as face_num_file:
+            file_context = face_num_file.read().decode('utf-8')
+            photo_name = filename_external[i] + "/" + filename_internal[j]            
+            face_index = file_context.find(photo_name)   #find the address of first char of photo_name
+            if face_index == -1 or file_context[face_index - 1] != '\n' :
+                print(photo_name + " not in face_num_list")
+                continue
+            str_face_num = ''
+            for k in range(2,6) :                        #k=1 is '\n', which is not need
+                next_char = file_context[face_index + len(photo_name) + k]         
+                if next_char == '\n' :
+                    break
+                str_face_num += next_char
+        actual_face_num = int(str_face_num)
+
         image = cv2.imread(TEST_FILE_NAME)
         time_start=time.time()                              #timing start
         results = detector.detect_faces(image)           #detect face
@@ -56,18 +73,8 @@ for i in range(len(filename_external)) :
         time_total = round(time_end - time_start , 3)
         detect_face_num = len(os.listdir(TEST_PIC_DIR))
 
-        with open(FACE_NUM_LIST , 'rb') as face_num_file:
-            file_context = face_num_file.read().decode('utf-8')
-            photo_name = filename_external[i] + "/" + filename_internal[j]
-            face_index = file_context.find(photo_name)   #find the address of first char of photo_name
-            str_face_num = ''
-            for k in range(2,6) :                        #k=1 is '\n', which is not need
-                next_char = file_context[face_index + len(photo_name) + k]         
-                if next_char == '\n' :
-                    break
-                str_face_num += next_char
-        actual_face_num = int(str_face_num)
         detect_rate = round(detect_face_num/actual_face_num , 3)
+
         with open(RESULT_FILE , 'a') as data_txt :
             data_txt.write(photo_name + ' ' + str_face_num + ' ' + str(detect_face_num)+ ' '+ str(detect_rate) + ' ' + str(time_total)+ '\n' )
 
