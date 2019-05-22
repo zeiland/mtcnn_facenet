@@ -40,3 +40,5 @@ LIB_PKL_DIR = DATA_DIR + '\\face_lib\\pkl_file\\'     #path of the lib pkl file
 RESULT_FILE = DATA_DIR + '\\result.txt'
 
 FACE_NUM_LIST = DATA_DIR + "\\wider_face_val_bbx_gt_new.txt"
+
+PROGRESS = DATA_DIR + '\\progress.txt'

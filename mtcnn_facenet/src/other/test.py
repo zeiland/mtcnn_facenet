@@ -26,10 +26,9 @@ def del_file(path):
             os.remove(c_path)
 
 
-detector = MTCNN()
-#method=0 : origin mtcnn   method=1 : split  method=2 : cut
+
 def test(method) :
-    with open(RESULT_FILE+str(method) , 'w') as data_txt :
+    with open(RESULT_FILE[ : -4] + str(method) + '.txt' , 'w') as data_txt :
         data_txt.write('photo_name' + ' ' + 'actual_fac_num' + ' ' + 'detect_face_num' + ' ' + 'detect_rate' + ' ' + 'detect_time' +  '\n')
     filename_external = os.listdir(TEST_FILE)
     detected_photo_num = 0
@@ -64,8 +63,13 @@ def test(method) :
 
             image = cv2.imread(TEST_FILE_NAME)
             time_start=time.time()                              #timing start
-            results = detector.detect_faces(image)           #detect face
-            Split_slice_detect.saveFaces(results , image)
+            if method == 0 :
+                results = detector.detect_faces(image)           #detect face
+                Split_slice_detect.saveFaces(results , image)
+            if method ==1 :
+                Split_slice_detect.detectSlice(image , detector , 3)
+            if method == 2 :
+                cut_out_detect.cutoutFaces(image, detector)
             time_end=time.time()                                #timing end
             time_total = round(time_end - time_start , 3)
             detect_face_num = len(os.listdir(TEST_PIC_DIR))
@@ -75,20 +79,26 @@ def test(method) :
             total_detect_face_num += detect_face_num
             
 
-            with open(RESULT_FILE+str(method) , 'a') as data_txt :
+            with open(RESULT_FILE[ : -4] + str(method) + '.txt' , 'a') as data_txt :
                 data_txt.write(photo_name + ' ' + str(actual_face_num) + ' ' + str(detect_face_num)+ ' '+ str(detect_rate) + ' ' + str(time_total)+ '\n' )
 
             detected_photo_num += 1
-            detected_rate = detected_photo_num/total_photo_num
+            detected_rate = round(detected_photo_num/total_photo_num , 2)
             if detected_rate > print_limit :
-                print("have detected " + str(round(detected_rate , 2)))
+                with open(PROGRESS , 'a') as progress_file :
+                    progress_file.write(str(method) + " have detected " + str(detected_rate) + "\n")
                 print_limit += 0.01
     total_detect_rate = round(total_detect_face_num/total_actual_face_num , 3)
-    with open(RESULT_FILE+str(method) , 'a') as data_txt :
+    with open(RESULT_FILE[ : -4] + str(method) + '.txt' , 'a') as data_txt :
         data_txt.write('total_actual_face_num '+ str(total_actual_face_num) + '\ntotal_detect_face_num ' + str(total_detect_face_num) + '\ntotal_detect_rate ' + str(total_detect_rate))
 
 
         
+detector = MTCNN()
+#method=0 : origin mtcnn   method=1 : split  method=2 : cut
+with open(PROGRESS , 'w') as progress_file :
+    progress_file.write("start\n")
 
-
-test()
+test(0)
+test(1)
+test(2)

@@ -32,13 +32,14 @@ def saveFaces(results , image_input):
 
 
 def detectSlice(img , detector , slice_num) :
-    if slice_num < 3 :
-        results = detector.detect_faces(img)
-        saveFaces(results , img)
+
+    results = detector.detect_faces(img)
+    saveFaces(results , img)
     
     #纵向分割图片
     if slice_num > 1 :
-        image_size = Image.open(TEST_FILE).size     #(width , height)
+        image_size_init = img.shape     
+        image_size  = [image_size_init[1] , image_size_init[0]]        #(width , height)
         slice_width = int(image_size[0] / slice_num)
         for i in range(slice_num - 1) :
             img_slice  = np.zeros((image_size[1],slice_width,3),np.uint8)
