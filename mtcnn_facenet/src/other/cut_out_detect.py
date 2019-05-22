@@ -4,7 +4,7 @@ import os
 import cv2
 from path_settings import *
 
-def cut_out_saveFaces(results , image, detector):
+def cutoutFaces(results , image, detector):
     number = len(os.listdir(TEST_PIC_DIR))
     face_num = len(results)
     cut_column = []
@@ -76,4 +76,4 @@ def cut_out_saveFaces(results , image, detector):
                 for i in range(image_size[1]):
                     for j in range(len(image_cut)):
                         image[i][j] = image_cut[i][j] 
-                cut_out_saveFaces(results_again , image_cut , detector)
+                cutoutFaces(results_again , image_cut , detector)
