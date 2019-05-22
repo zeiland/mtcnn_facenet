@@ -37,6 +37,7 @@
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\other\brightness_and_contrast.py" />
     <Compile Include="src\other\example.py" />
     <Compile Include="src\facenet\facenet.py" />
     <Compile Include="src\mtcnn\mtcnn\exceptions\__init__.py" />
@@ -46,14 +47,10 @@
     <Compile Include="src\mtcnn\mtcnn\__init__.py" />
     <Compile Include="src\other\compare_result.py" />
     <Compile Include="src\other\cut_out_detect.py" />
-    <Compile Include="src\other\Lib_complete.py" />
+    <Compile Include="src\other\lib_process.py" />
     <Compile Include="src\other\path_settings.py" />
-    <Compile Include="src\other\read_pkl.py" />
     <Compile Include="src\other\Split_slice_detect.py" />
     <Compile Include="src\other\test_pkl_calculate.py" />
-    <Compile Include="src\other\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\mtcnn\mtcnn\data\mtcnn_weights.npy" />

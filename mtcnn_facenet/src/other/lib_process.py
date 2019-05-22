@@ -15,7 +15,7 @@ from path_settings import *
 
 
 
-def lib_complete() :
+def completeLib() :
 
     filenames_jpg = os.listdir(LIB_PIC_DIR)
     filenames_pkl = os.listdir(LIB_PKL_DIR)
@@ -29,7 +29,7 @@ def lib_complete() :
         if(filename not in s):
             path_image=LIB_PIC_DIR+filename+'.jpg'
             inputstring=['20180408-102900',path_image,]
-            temp_emb = getEmb(parse_arguments(inputstring))
+            temp_emb = getEmb(parseArguments(inputstring))
             pkl_filename = filename + ".pkl"
             output = open(LIB_PKL_DIR + pkl_filename , 'wb')     #create the target pkl_file in binary 
             pickle.dump(temp_emb , output , 2)                      #print emb value
@@ -58,7 +58,7 @@ def getEmb(args) :
     return emb                   #array of 1*512
 
 
-def parse_arguments(argv):
+def parseArguments(argv):
     parser = argparse.ArgumentParser()
     
     parser.add_argument('model', type=str, 

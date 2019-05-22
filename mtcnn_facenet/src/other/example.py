@@ -8,8 +8,8 @@ import numpy as np
 import Split_slice_detect 
 import cut_out_detect
 from compare_result import compare
-from lib_process import lib_complete
-from test_pkl_calculate import test_pkl_lib_add
+from lib_process import completeLib
+from test_pkl_calculate import addPklLib
 from PIL import Image
 import cv2
 import brightness_and_contrast
@@ -19,12 +19,12 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
-def del_file(path):
+def delFile(path):
     ls = os.listdir(path)
     for i in ls:
         c_path = os.path.join(path, i)
         if os.path.isdir(c_path):
-            del_file(c_path)
+            delFile(c_path)
         else:
             os.remove(c_path)
 
@@ -46,7 +46,7 @@ for i in range(len(filename_external)) :
     for j in range(len(filename_internal)) :
         TEST_FILE_NAME = TEST_FILE + filename_external[i] + "\\" + filename_internal[j]
         #print(TEST_FILE_NAME)
-        del_file(TEST_PIC_DIR)            #clear all saved test file before adding new file 
+        delFile(TEST_PIC_DIR)            #clear all saved test file before adding new file 
         #del_file(TEST_PKL_DIR)
 
 

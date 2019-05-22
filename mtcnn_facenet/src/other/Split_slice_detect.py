@@ -31,7 +31,7 @@ def saveFaces(results , image_input):
 
 
 
-def slice_n_detect(img , detector , slice_num) :
+def detectSlice(img , detector , slice_num) :
     if slice_num < 3 :
         results = detector.detect_faces(img)
         saveFaces(results , img)
