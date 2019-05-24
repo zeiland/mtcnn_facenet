@@ -21,6 +21,9 @@ def saveFaces(results , image_input):
                 
         for i in range(height):
             for j in range(width):
+                image_size_init = image_input.shape                     
+                if bounding_box[0]+j >= image_size_init[1] or bounding_box[1]+i >= image_size_init[0]:
+                    continue
                 img_blank[i][j] = image_input[bounding_box[1]+i][bounding_box[0]+j]
                 image_input[bounding_box[1]+i][bounding_box[0]+j] = 0
         
