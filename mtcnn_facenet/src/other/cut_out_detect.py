@@ -7,7 +7,6 @@ from path_settings import *
 def cutoutFaces(image, detector):
 
     results = detector.detect_faces(image)
-    print(len(results))
     if len(results) == 0 :
         return
 
@@ -34,6 +33,8 @@ def cutoutFaces(image, detector):
 
         for i in range(height):
             for j in range(width):
+                if bounding_box[0]+j >= image_size[0] or bounding_box[1]+i >= image_size[1]:
+                    continue
                 img_blank[i][j] = image[bounding_box[1]+i][bounding_box[0]+j]
         
 
@@ -63,6 +64,8 @@ def cutoutFaces(image, detector):
         for i in range(image_size[0]) :
             column_reserved.append(i)
         for i in range(len(cut_column)) :
+            if cut_column[i] >= image_size[0] :
+                    continue
             column_reserved.remove(cut_column[i])
                 
                                                                                                #将图片对应保存的列数赋值到image_cut
@@ -70,7 +73,7 @@ def cutoutFaces(image, detector):
     for i in range(len(column_reserved)) :               
         for j in range(image_size[1]) :
            image_cut[j][i] = image[j][column_reserved[i]]
-    cv2.imwrite("D:\\cut.jpg", image_cut)
+
                                                                                                 #detect again in image_cut
 
 
