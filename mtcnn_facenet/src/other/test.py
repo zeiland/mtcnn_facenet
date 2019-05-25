@@ -5,7 +5,7 @@
 from path_settings import *
 from mtcnn import MTCNN
 import numpy as np
-import Split_slice_detect 
+import split_slice_detect 
 import cut_out_detect
 from PIL import Image
 import cv2
@@ -65,9 +65,9 @@ def test(method) :
             time_start=time.time()                              #timing start
             if method == 0 :
                 results = detector.detect_faces(image)           #detect face
-                Split_slice_detect.saveFaces(results , image)
+                split_slice_detect.saveFaces(results , image)
             if method ==1 :
-                Split_slice_detect.detectSlice(image , detector , 3)
+                split_slice_detect.detectSlice(image , detector , 3)
             if method == 2 :
                 cut_out_detect.cutoutFaces(image, detector)
             time_end=time.time()                                #timing end
@@ -99,6 +99,6 @@ detector = MTCNN()
 with open(PROGRESS , 'w') as progress_file :
     progress_file.write("start\n")
 
-test(0)
-test(1)
+#test(0)
+#test(1)
 test(2)

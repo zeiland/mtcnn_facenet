@@ -43,41 +43,34 @@ def cutoutFaces(image, detector):
         
                                             #detect again after removing the faces detected before
             #排序并删除重复的列数
-        cut_column.sort()
-        column_count = 0
-        column = 0
-        for i in range(len(cut_column)) :
-            if i == 0 :
-                column = cut_column[0]
-                continue               
-            if cut_column[i] == column :
-                  column = cut_column[i]
-                  cut_column[i] = 0
-                  column_count += 1
-            else :
-                column = cut_column[i]
-        for i in range(column_count) :
-            cut_column.remove(0)
-            
-                                                                                                #取反集得到要保存的列数
-        column_reserved = []
-        for i in range(image_size[0]) :
-            column_reserved.append(i)
-        for i in range(len(cut_column)) :
-            if cut_column[i] >= image_size[0] :
-                    continue
-            column_reserved.remove(cut_column[i])
+    cut_column.sort()
+    column_count = 0
+    column = 0
+    for i in range(len(cut_column)) :
+        if i == 0 :
+            column = cut_column[0]
+            continue               
+        if cut_column[i] == column :
+            column = cut_column[i]
+            cut_column[i] = 0
+            column_count += 1
+        else :
+            column = cut_column[i]
+    for i in range(column_count) :
+        cut_column.remove(0)
+                                                                                                  #取反集得到要保存的列数
+    column_reserved = []
+    for i in range(image_size[0]) :
+        column_reserved.append(i)
+    for i in range(len(cut_column)) :
+        if cut_column[i] >= image_size[0] or cut_column[i] < 0 :
+                continue
+        column_reserved.remove(cut_column[i])
+        
                 
                                                                                                #将图片对应保存的列数赋值到image_cut
     image_cut = np.zeros((image_size[1], len(column_reserved), 3), np.uint8)
     for i in range(len(column_reserved)) :               
         for j in range(image_size[1]) :
-           image_cut[j][i] = image[j][column_reserved[i]]
-
-                                                                                                #detect again in image_cut
-
-
-        #for i in range(image_size[1]):
-            #for j in range(len(image_cut)):
-                #image[i][j] = image_cut[i][j] 
+           image_cut[j][i] = image[j][column_reserved[i]]                                                                                                
     cutoutFaces(image_cut , detector)
