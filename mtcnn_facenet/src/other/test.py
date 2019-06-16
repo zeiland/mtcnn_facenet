@@ -5,7 +5,7 @@
 from path_settings import *
 from mtcnn import MTCNN
 import numpy as np
-import Split_slice_detect 
+import split_slice_detect 
 import cut_out_detect
 from PIL import Image
 import cv2
@@ -41,7 +41,7 @@ def test(method) :
     with open(FACE_NUM_LIST , 'rb') as face_num_file:
         lines = face_num_file.readlines()
         for i in range (0, len(lines), 2):
-            dict[str(lines[i])[2 : -5]] = int(lines[i+1])
+            dict[str(lines[i])[2 : -3]] = int(lines[i+1])
 
     for i in range(len(filename_external)) :    
         total_photo_num += len(os.listdir(TEST_FILE + filename_external[i]))
