@@ -37,6 +37,6 @@ def compare():
 
 
         if(aim_file!='-'):
-            ret.append(aimfile)
+            ret.append(aim_file)
 
     return ret

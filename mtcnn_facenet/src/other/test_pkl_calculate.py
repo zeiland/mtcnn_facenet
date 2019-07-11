@@ -10,7 +10,7 @@ def addPklLib() :
         path_image = TEST_PIC_DIR + filename
         input_string=['20180408-102900',
             path_image,]
-        temp_emb = Lib_complete.getEmb(Lib_complete.parse_arguments(input_string))
+        temp_emb = lib_process.getEmb(lib_process.parseArguments(input_string))
         pkl_filename = filename[0:-4] + ".pkl"
         output = open(TEST_PKL_DIR + pkl_filename , 'wb')     #create the target pkl_file in binary 
         pickle.dump(temp_emb , output , 2)                      #print emb value
