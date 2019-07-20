@@ -23,7 +23,7 @@ def compare():
     for filename_1 in filenames_1:
 #    print(i)
         index+=1
-        min_diff=0.8
+        min_diff=0.1
         aim_file='-'
         for filename_2 in filenames_2:
             diff = calculateDiff(TEST_PKL_DIR + filename_1,LIB_PKL_DIR + filename_2)

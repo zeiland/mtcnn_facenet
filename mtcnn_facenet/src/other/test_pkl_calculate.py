@@ -4,9 +4,12 @@ import pickle
 from path_settings import *
 
 def addPklLib() :
-
     filenames_jpg = os.listdir(TEST_PIC_DIR)
+    print("detect ",len(filenames_jpg)," face(s)")
+    index = 0
     for filename in filenames_jpg :
+        index += 1
+        print("calculating " , index , " embbing value")
         path_image = TEST_PIC_DIR + filename
         input_string=['20180408-102900',
             path_image,]

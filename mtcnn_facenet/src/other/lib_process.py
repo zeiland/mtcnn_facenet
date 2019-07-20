@@ -31,6 +31,7 @@ def completeLib() :
             inputstring=['20180408-102900',path_image,]
             temp_emb = getEmb(parseArguments(inputstring))
             pkl_filename = filename + ".pkl"
+            print("updating lib_pkl :" + pkl_filename)
             output = open(LIB_PKL_DIR + pkl_filename , 'wb')     #create the target pkl_file in binary 
             pickle.dump(temp_emb , output , 2)                      #print emb value
             output.close()

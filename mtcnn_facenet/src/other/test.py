@@ -118,8 +118,50 @@ def single_face_add_lib():
         image = cv2.imread(TEST_PIC_DIR + face_file[0])
         cv2.imwrite(LIB_PIC_DIR + pic_file[i],image)
 
+def gray_dectect() :
+    files_path = "D:\\proj_face_recog\\roomfaces\\further\\"
+    gray_path = "D:\\proj_face_recog\\roomfaces\\gray\\"
+    pic_file = os.listdir(files_path)
+    face_size = 160
+    for i in range(len(pic_file)) :
+        del_file(TEST_PIC_DIR)
+        image_gray = cv2.imread(files_path + pic_file[i] , 0)
+        image = cv2.imread(files_path + pic_file[i])
+        cv2.imwrite(gray_path + pic_file[i],image_gray)
+        image_gray = cv2.imread(gray_path + pic_file[i])
+
+        print(pic_file[i])
+        results = detector.detect_faces(image_gray)
+        if (len(results) == 0) :
+            print(pic_file[i] + ' cannot detect any face')
+            continue
+       
+ 
+        for result in results:                           #detect faces and save the faces into test_jpg
+            bounding_box = result['box']
+            keypoints = result['keypoints']
+
+
+        #cut out face
+            img_blank = np.zeros((bounding_box[3], bounding_box[2], 3), np.uint8)
+            img_resize = np.zeros((face_size,face_size,3),np.uint8)
+            height = bounding_box[3]
+            width = bounding_box[2]
+                
+            for j in range(height):
+                for k in range(width):                                       
+                    img_blank[j][k] = image[bounding_box[1]+j][bounding_box[0]+k]
+        
+            img_resize = cv2.resize(img_blank,(face_size,face_size))
+            cv2.imwrite(LIB_PIC_DIR + pic_file[i],img_resize)
+
+
+
+del_file(TEST_PIC_DIR)
+del_file(TEST_PKL_DIR)
 detector = MTCNN()
-single_face_add_lib()
+image = cv2.imread(DATA_DIR+'\\test.jpg')
+split_slice_detect.detectSlice(image , detector , 1)
 ##method=0 : origin mtcnn   method=1 : split  method=2 : cut
 #with open(PROGRESS , 'w') as progress_file :
 #    progress_file.write("start\n")
@@ -128,8 +170,8 @@ single_face_add_lib()
 ##test(1)
 #test(2)
 #completeLib()
-#one_pic_detect()
-#addPklLib()            #complete pkl_file of test faces
-#unpresent=compare()           #compare the pkl_file in lib and test
-#for i in unpresent:
-#    print(i)
+
+addPklLib()            #complete pkl_file of test faces
+unpresent=compare()           #compare the pkl_file in lib and test
+for i in unpresent:
+    print(i)
