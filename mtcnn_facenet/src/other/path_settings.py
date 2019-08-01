@@ -44,3 +44,5 @@ FACE_NUM_LIST = DATA_DIR + "\\wider_face_val_bbx_gt_new.txt"
 PROGRESS = DATA_DIR + '\\progress.txt'
 
 ONE_PIC_DETECT = DATA_DIR + '\\test.jpg'
+
+LIB_WEIGH_DIR = DATA_DIR + '\\face_lib\\weigh\\'

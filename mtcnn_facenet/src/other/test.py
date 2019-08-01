@@ -12,7 +12,9 @@ import cv2
 import brightness_and_contrast
 import time
 from compare_result import compare
+from compare_result import compare_weigh
 from lib_process import completeLib
+from lib_process import complete_lib_weigh
 from test_pkl_calculate import addPklLib
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -157,11 +159,12 @@ def gray_dectect() :
 
 
 
-del_file(TEST_PIC_DIR)
-del_file(TEST_PKL_DIR)
-detector = MTCNN()
-image = cv2.imread(DATA_DIR+'\\test.jpg')
-split_slice_detect.detectSlice(image , detector , 1)
+
+#del_file(TEST_PIC_DIR)
+#del_file(TEST_PKL_DIR)
+#detector = MTCNN()
+#image = cv2.imread(DATA_DIR+'\\test.jpg')
+#split_slice_detect.detectSlice(image , detector , 1)
 ##method=0 : origin mtcnn   method=1 : split  method=2 : cut
 #with open(PROGRESS , 'w') as progress_file :
 #    progress_file.write("start\n")
@@ -169,9 +172,10 @@ split_slice_detect.detectSlice(image , detector , 1)
 ##test(0)
 ##test(1)
 #test(2)
-#completeLib()
-
-addPklLib()            #complete pkl_file of test faces
-unpresent=compare()           #compare the pkl_file in lib and test
-for i in unpresent:
-    print(i)
+completeLib()
+complete_lib_weigh()
+#addPklLib()            #complete pkl_file of test faces
+#unpresent=compare()           #compare the pkl_file in lib and test
+unpresent = compare_weigh()
+#for i in unpresent:
+#    print(i)

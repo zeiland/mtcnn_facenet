@@ -4,15 +4,14 @@ from __future__ import print_function
 
 import os
 import tensorflow as tf
-import facenet
 import pickle
 import argparse
 import numpy as np
 from scipy import misc
 import copy
 from path_settings import *
-
-
+import facenet
+import compare_result
 
 
 def completeLib() :
@@ -75,3 +74,25 @@ def parseArguments(argv):
 
 #lib_complete()
     
+def complete_lib_weigh() :
+    filenames_pkl = os.listdir(LIB_PKL_DIR)
+    filenames_weigh = os.listdir(LIB_WEIGH_DIR)
+
+    s=set()
+    for filename in filenames_weigh:
+        s.add(filename)
+    for filename in filenames_pkl:
+        if(filename not in s):
+            same_person_pic=[filename,]
+            for  another_every_pic_pkl in filenames_pkl:
+                if((filename[:-5]==another_every_pic_pkl[:-5]) and (filename!=another_every_pic_pkl)):
+                    same_person_pic.append(another_every_pic_pkl)
+            if(len(same_person_pic)!=3):
+                print(filename + "doesn't contain 3 pkl files")
+                continue
+            print("weigh lib completing: " + filename[:-6])
+            compare_result.weigh_modify(same_person_pic[0] , same_person_pic[1] ,same_person_pic[2] , LIB_WEIGH_DIR)
+        
+
+
+
