@@ -3,7 +3,7 @@ import os
 import pickle
 from path_settings import *
 
-def addPklLib() :
+def addPklTest() :
     filenames_jpg = os.listdir(TEST_PIC_DIR)
     print("detect ",len(filenames_jpg)," face(s)")
     index = 0

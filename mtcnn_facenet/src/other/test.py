@@ -11,11 +11,10 @@ from PIL import Image
 import cv2
 import brightness_and_contrast
 import time
-from compare_result import compare
-from compare_result import compare_weigh
+import compare_result
 from lib_process import completeLib
 from lib_process import complete_lib_weigh
-from test_pkl_calculate import addPklLib
+from test_pkl_calculate import addPklTest
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -105,10 +104,10 @@ def one_pic_detect() :
     print(len(os.listdir(TEST_PIC_DIR)))
 
 def single_face_add_lib():
-    files_path = "D:\\proj_face_recog\\roomfaces\\roomfaces_1\\"
+    files_path = DATA_DIR + "\\face_test\\pic_file\\"
     pic_file = os.listdir(files_path)
     for i in range(len(pic_file)) :
-        del_file(TEST_PIC_DIR)
+        #del_file(TEST_PIC_DIR)
         image = cv2.imread(files_path + pic_file[i])
         print(pic_file[i])
         results = detector.detect_faces(image)
@@ -116,9 +115,9 @@ def single_face_add_lib():
             print(pic_file[i] + ' cannot detect any face')
             continue
         split_slice_detect.saveFaces(results , image)
-        face_file = os.listdir(TEST_PIC_DIR)
-        image = cv2.imread(TEST_PIC_DIR + face_file[0])
-        cv2.imwrite(LIB_PIC_DIR + pic_file[i],image)
+        #face_file = os.listdir(TEST_PIC_DIR)
+        #image = cv2.imread(TEST_PIC_DIR + face_file[0])
+        #cv2.imwrite(LIB_PIC_DIR + pic_file[i],image)
 
 def gray_dectect() :
     files_path = "D:\\proj_face_recog\\roomfaces\\further\\"
@@ -168,14 +167,17 @@ def gray_dectect() :
 ##method=0 : origin mtcnn   method=1 : split  method=2 : cut
 #with open(PROGRESS , 'w') as progress_file :
 #    progress_file.write("start\n")
-
+#single_face_add_lib()
 ##test(0)
 ##test(1)
 #test(2)
-completeLib()
-complete_lib_weigh()
-#addPklLib()            #complete pkl_file of test faces
-#unpresent=compare()           #compare the pkl_file in lib and test
-unpresent = compare_weigh()
+
+#completeLib()
+#complete_lib_weigh()
+#addPklTest()            #complete pkl_file of test faces
+#unpresent=compare_result.compare()           #compare the pkl_file in lib and test
+#unpresent = compare_result.compare_weigh()
+#compare_result.compare_three()
+compare_result.compare_three_weigh()
 #for i in unpresent:
 #    print(i)
