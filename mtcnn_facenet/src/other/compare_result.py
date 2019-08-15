@@ -1,6 +1,7 @@
 import os,sys
 import numpy as np
 import pickle
+import math
 from path_settings import *
 
 def calculateDiff(pkl_file_1 , pkl_file_2) :
@@ -60,14 +61,15 @@ def weigh_modify(pkl_file_1 , pkl_file_2 , pkl_file_3 , weigh_filename) :
     with open(LIB_PKL_DIR+pkl_file_3 , 'rb') as f :
         binary_file_3 = pickle.load(f)
     diff_mat = abs(np.subtract(binary_file_1[:], binary_file_2[:]))
-    weigh_0 = np.array(np.sum(diff_mat)/diff_mat[:]/512)    #除以512是为了让和的大小保持与原来一样，这样和没改过权重的pkl文件直接算差值也不会存在系数的差别
+    #weigh_0 = np.array(np.sum(diff_mat)/diff_mat[:]/512)    #除以512是为了让和的大小保持与原来一样，这样和没改过权重的pkl文件直接算差值也不会存在系数的差别
     #weigh_0 = np.array(1000*np.sum(diff_mat)/diff_mat[:]/np.sum(np.sum(diff_mat)/diff_mat[:]))
+    weigh_0 = np.array(np.exp((-1)*diff_mat[:])/np.sum(np.exp((-1)*diff_mat[:])))
 
     diff_mat = abs(np.subtract(binary_file_1[:], binary_file_3[:]))
-    weigh_1 = np.array(np.sum(diff_mat)/diff_mat[:]/512)
+    weigh_1 = np.array(np.exp((-1)*diff_mat[:])/np.sum(np.exp((-1)*diff_mat[:])))
 
     diff_mat = abs(np.subtract(binary_file_2[:], binary_file_3[:]))
-    weigh_2 = np.array(np.sum(diff_mat)/diff_mat[:]/512)
+    weigh_2 = np.array(np.exp((-1)*diff_mat[:])/np.sum(np.exp((-1)*diff_mat[:])))
 
     weigh = np.array((weigh_0[:]+weigh_1[:]+weigh_2[:])/3)
 
@@ -161,3 +163,34 @@ def compare_three_weigh():
         if index==1:
             print("face\t\tmost_similar_face\tdifference")
         print ("%s\t\t%s\t\t%.3f"%(filename1,aimfile,min_diff))
+
+def compare_normal_distribution_exclude() :
+    filenames_test=os.listdir(TEST_PKL_DIR)
+    filenames_weigh=os.listdir(LIB_WEIGH_DIR)
+    filenames_lib=os.listdir(LIB_PKL_DIR)
+    index=0
+    ret = []
+    for filename1 in filenames_test:       
+#    print(i)
+        index+=1
+        min_diff=2
+        aimfile='-'
+        for filename2 in filenames_lib:
+            diff_list = []
+            for filename_another in filenames_lib :
+                if filename_another[:-6] == filename2[:-6] :
+                    for filename3 in filenames_weigh:
+                        if filename2 == filename3 :
+                            diff=diff_weigh_cal(TEST_PKL_DIR+filename1,LIB_WEIGH_DIR+filename2,LIB_PKL_DIR+filename3)
+                            diff_list.append(diff)
+            diff_std_deviation = np.std(diff_list)
+            for i in range(len(diff_list)) :
+                if diff_list[i] > (np.mean(diff_list)+2*diff_std_deviation) or diff_list[i] < (np.mean(diff_list)-2*diff_std_deviation) :
+                    diff_list.remove(diff_list[i])
+            diff_average = np.mean(diff_list)
+            if(diff_average < min_diff):
+                min_diff = diff_average
+                aimfile = filename2
+        if index==1:
+            print("face\t\tmost_similar_face\tdifference")
+        print ("%s\t\t%s\t\t%f"%(filename1,aimfile,min_diff))

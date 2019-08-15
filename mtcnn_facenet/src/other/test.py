@@ -120,8 +120,8 @@ def single_face_add_lib():
         #cv2.imwrite(LIB_PIC_DIR + pic_file[i],image)
 
 def gray_dectect() :
-    files_path = "D:\\proj_face_recog\\roomfaces\\further\\"
-    gray_path = "D:\\proj_face_recog\\roomfaces\\gray\\"
+    files_path = DATA_DIR + "\\face_test\\pic_file\\"
+    gray_path = DATA_DIR + "\\face_test\\gray\\"
     pic_file = os.listdir(files_path)
     face_size = 160
     for i in range(len(pic_file)) :
@@ -137,11 +137,12 @@ def gray_dectect() :
             print(pic_file[i] + ' cannot detect any face')
             continue
        
- 
+        number = 0
+
         for result in results:                           #detect faces and save the faces into test_jpg
             bounding_box = result['box']
             keypoints = result['keypoints']
-
+            number += 1
 
         #cut out face
             img_blank = np.zeros((bounding_box[3], bounding_box[2], 3), np.uint8)
@@ -154,30 +155,40 @@ def gray_dectect() :
                     img_blank[j][k] = image[bounding_box[1]+j][bounding_box[0]+k]
         
             img_resize = cv2.resize(img_blank,(face_size,face_size))
-            cv2.imwrite(LIB_PIC_DIR + pic_file[i],img_resize)
+            cv2.imwrite(TEST_PIC_DIR + str(number) + ".jpg",img_resize)
+        rect(image , results)
+
+def rect(image , results):
+    for result in results :
+        bounding_box = result['box']
+        cv2.rectangle(image,
+              (bounding_box[0], bounding_box[1]),
+              (bounding_box[0]+bounding_box[2], bounding_box[1] + bounding_box[3]),
+              (0,155,255),
+              1)
+    cv2.imwrite(DATA_DIR+'\\face_test\\rect_pic.jpg' , image)
 
 
-
-
-#del_file(TEST_PIC_DIR)
-#del_file(TEST_PKL_DIR)
-#detector = MTCNN()
-#image = cv2.imread(DATA_DIR+'\\test.jpg')
-#split_slice_detect.detectSlice(image , detector , 1)
+del_file(TEST_PIC_DIR)
+del_file(TEST_PKL_DIR)
+detector = MTCNN()
+#image = cv2.imread(DATA_DIR+'\\face_test\\pic_file\\lib_1.jpg')
+#split_slice_detect.detectSlice(image , detector , 3)
 ##method=0 : origin mtcnn   method=1 : split  method=2 : cut
 #with open(PROGRESS , 'w') as progress_file :
 #    progress_file.write("start\n")
 #single_face_add_lib()
+gray_dectect()
 ##test(0)
 ##test(1)
 #test(2)
-
+#del_file(LIB_WEIGH_DIR)
 #completeLib()
 #complete_lib_weigh()
 #addPklTest()            #complete pkl_file of test faces
 #unpresent=compare_result.compare()           #compare the pkl_file in lib and test
 #unpresent = compare_result.compare_weigh()
 #compare_result.compare_three()
-compare_result.compare_three_weigh()
+#compare_result.compare_normal_distribution_exclude()
 #for i in unpresent:
 #    print(i)
