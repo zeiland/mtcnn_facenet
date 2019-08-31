@@ -29,12 +29,11 @@ def compare():
     filenames_2=os.listdir(LIB_PKL_DIR)
     index=0
     ret = []
-  
+    correct_num = 0  
 
     for filename_1 in filenames_1:
-#    print(i)
         index+=1
-        min_diff=0.1
+        min_diff=0.5
         aim_file='-'
         for filename_2 in filenames_2:
             diff = calculateDiff(TEST_PKL_DIR + filename_1,LIB_PKL_DIR + filename_2)
@@ -44,12 +43,21 @@ def compare():
         if index==1:
             print("face\t\tmost_similar_face\tdifference")
 
+        for i in range(len(filename_1)) :
+            if filename_1[i] == "." :
+                lib_face_name = filename_1[:i]
+                break
+        for i in range(len(aim_file)) :
+            if aim_file[i] == "." :
+                test_face_name = aim_file[:i]
+                break
+        if lib_face_name == test_face_name :
+            correct_num += 1
         print ("%s\t\t%s\t\t%.3f"%(filename_1,aim_file,min_diff))
-
 
         if(aim_file!='-'):
             ret.append(aim_file)
-
+        print("correct face num: %d"%(correct_num) )
     return ret
 
 def weigh_modify(pkl_file_1 , pkl_file_2 , pkl_file_3 , weigh_filename) :
@@ -62,14 +70,14 @@ def weigh_modify(pkl_file_1 , pkl_file_2 , pkl_file_3 , weigh_filename) :
         binary_file_3 = pickle.load(f)
     diff_mat = abs(np.subtract(binary_file_1[:], binary_file_2[:]))
     #weigh_0 = np.array(np.sum(diff_mat)/diff_mat[:]/512)    #除以512是为了让和的大小保持与原来一样，这样和没改过权重的pkl文件直接算差值也不会存在系数的差别
-    #weigh_0 = np.array(1000*np.sum(diff_mat)/diff_mat[:]/np.sum(np.sum(diff_mat)/diff_mat[:]))
-    weigh_0 = np.array(np.exp((-1)*diff_mat[:])/np.sum(np.exp((-1)*diff_mat[:])))
+    #weigh_0 = np.array(np.sum(diff_mat)/diff_mat[:]/np.sum(np.sum(diff_mat)/diff_mat[:]))
+    weigh_0 = np.array(np.exp(75*(-1)*diff_mat[:])/np.sum(np.exp(75*(-1)*diff_mat[:])))
 
     diff_mat = abs(np.subtract(binary_file_1[:], binary_file_3[:]))
-    weigh_1 = np.array(np.exp((-1)*diff_mat[:])/np.sum(np.exp((-1)*diff_mat[:])))
+    weigh_1 = np.array(np.exp(75*(-1)*diff_mat[:])/np.sum(np.exp(75*(-1)*diff_mat[:])))
 
     diff_mat = abs(np.subtract(binary_file_2[:], binary_file_3[:]))
-    weigh_2 = np.array(np.exp((-1)*diff_mat[:])/np.sum(np.exp((-1)*diff_mat[:])))
+    weigh_2 = np.array(np.exp(75*(-1)*diff_mat[:])/np.sum(np.exp(75*(-1)*diff_mat[:])))
 
     weigh = np.array((weigh_0[:]+weigh_1[:]+weigh_2[:])/3)
 
@@ -88,8 +96,10 @@ def compare_weigh():
     filenames_lib=os.listdir(LIB_PKL_DIR)
     index=0
     ret = []
+
+    correct_num = 0
+
     for filename1 in filenames_test:       
-#    print(i)
         index+=1
         min_diff=5
         aimfile='-'
@@ -103,20 +113,34 @@ def compare_weigh():
                         aimfile = filename2
         if index==1:
             print("face\t\tmost_similar_face\tdifference")
-        print ("%s\t\t%s\t\t%.3f"%(filename1,aimfile,min_diff))
+
+        for i in range(len(filename1)) :
+            if filename1[i] == "." :
+                lib_face_name = filename1[:i]
+                break
+        for i in range(len(aimfile)) :
+            if aimfile[i] == "." :
+                test_face_name = aimfile[:i]
+                break
+        if lib_face_name == test_face_name :
+            correct_num += 1
+
+        print ("%s\t\t%s\t\t%f"%(filename1,aimfile,min_diff))
+        print("correct face num: %d"%(correct_num) )
 
 def compare_three():
     filenames_1=os.listdir(TEST_PKL_DIR)
     filenames_2=os.listdir(LIB_PKL_DIR)
     index=0
     ret = []
+
+    #correct_num = 0  
+
     for filename_1 in filenames_1:
-#    print(i)
         index+=1
         min_diff=0.5
         aim_file='-'
         for filename_2 in filenames_2:
-            #print(filename_2[:-6])
             diff_sum = 0
             for filename_another in filenames_2 :
                 if filename_2[:-6] == filename_another[:-6] :
@@ -128,13 +152,24 @@ def compare_three():
                 aim_file = filename_2
         if index==1:
             print("face\t\tmost_similar_face\tdifference")
+        
+        #for i in range(len(filename1)) :
+        #    if filename1[i] == "." :
+        #        lib_face_name = filename1[:i]
+        #        break
+        #for i in range(len(aimfile)) :
+        #    if aimfile[i] == "." :
+        #        test_face_name = aimfile[:i]
+        #        break
+        #if lib_face_name == test_face_name :
+        #    correct_num += 1
 
         print ("%s\t\t%s\t\t%.3f"%(filename_1,aim_file,min_diff))
 
 
         if(aim_file!='-'):
             ret.append(aim_file)
-
+        #print("correct face num: %d"%(correct_num) )
     return ret
 
 def compare_three_weigh():
@@ -170,8 +205,10 @@ def compare_normal_distribution_exclude() :
     filenames_lib=os.listdir(LIB_PKL_DIR)
     index=0
     ret = []
+
+    correct_num = 0
+
     for filename1 in filenames_test:       
-#    print(i)
         index+=1
         min_diff=2
         aimfile='-'
@@ -193,4 +230,18 @@ def compare_normal_distribution_exclude() :
                 aimfile = filename2
         if index==1:
             print("face\t\tmost_similar_face\tdifference")
+
+        for i in range(len(filename1)) :
+            if filename1[i] == "." :
+                lib_face_name = filename1[:i]
+                break
+        for i in range(len(aimfile)) :
+            if aimfile[i] == "." :
+                test_face_name = aimfile[:i]
+                break
+        if lib_face_name == test_face_name :
+            correct_num += 1
+
         print ("%s\t\t%s\t\t%f"%(filename1,aimfile,min_diff))
+
+        print("correct face num: %d"%(correct_num) )

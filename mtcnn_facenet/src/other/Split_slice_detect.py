@@ -18,7 +18,10 @@ def saveFaces(results , image_input):
         img_resize = np.zeros((face_size,face_size,3),np.uint8)
         height = bounding_box[3]
         width = bounding_box[2]
-                
+        
+        #font=cv2.FONT_HERSHEY_SIMPLEX#使用默认字体
+        #img=cv2.putText(im,'3',(0,40),font,1.2,(255,255,255),2)#添加文字，1.2表示字体大小，（0,40）是初始的位置，(255,255,255)表示颜色，2表示粗细
+
         for i in range(height):
             for j in range(width):                    
                 if bounding_box[0]+j >= len(image_input[0]) or bounding_box[1]+i >= len(image_input):
@@ -70,4 +73,29 @@ def detectSlice(img , detector , slice_num) :
     
 
 
+def printNum(detector , image_input) :
+    number = 0
+    results = detector.detect_faces(image_input)
+    font=cv2.FONT_HERSHEY_SIMPLEX#使用默认字体
+    for result in results:                           #detect faces and save the faces into test_jpg
+        bounding_box = result['box']
+        keypoints = result['keypoints']
+        number += 1
 
+        #cut out face
+
+
+        height = bounding_box[3]
+        width = bounding_box[2]
+        
+        cv2.rectangle(image_input,
+              (bounding_box[0], bounding_box[1]),
+              (bounding_box[0]+bounding_box[2], bounding_box[1] + bounding_box[3]),
+              (0,155,255),
+              2)
+
+        image_input=cv2.putText(image_input,str(number),(bounding_box[0],bounding_box[1]),font,0.8,(255,255,255),2)#添加文字，1.2表示字体大小，（0,40）是初始的位置，(255,255,255)表示颜色，2表示粗细
+
+        
+    cv2.imwrite(DATA_DIR + "\\test.jpg", image_input)
+    

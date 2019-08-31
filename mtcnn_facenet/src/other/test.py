@@ -114,10 +114,29 @@ def single_face_add_lib():
         if (len(results) == 0) :
             print(pic_file[i] + ' cannot detect any face')
             continue
-        split_slice_detect.saveFaces(results , image)
-        #face_file = os.listdir(TEST_PIC_DIR)
-        #image = cv2.imread(TEST_PIC_DIR + face_file[0])
-        #cv2.imwrite(LIB_PIC_DIR + pic_file[i],image)
+        face_size = 160    
+        number = 0
+        for result in results:                           #detect faces and save the faces into test_jpg
+            bounding_box = result['box']
+            keypoints = result['keypoints']
+            number += 1
+            img_blank = np.zeros((bounding_box[3], bounding_box[2], 3), np.uint8)
+            img_resize = np.zeros((face_size,face_size,3),np.uint8)
+            height = bounding_box[3]
+            width = bounding_box[2]
+                
+            for k in range(height):
+                for j in range(width):                    
+                    if bounding_box[0]+j >= len(image[0]) or bounding_box[1]+k >= len(image):
+                        continue
+                    img_blank[k][j] = image[bounding_box[1]+k][bounding_box[0]+j]
+                    image[bounding_box[1]+k][bounding_box[0]+j] = 0
+            img_resize = cv2.resize(img_blank,(face_size,face_size))
+            if number == 1 :
+                cv2.imwrite(TEST_PIC_DIR + pic_file[i], img_resize) 
+            else :
+                cv2.imwrite(TEST_PIC_DIR + pic_file[i][:-4] + "_" + str(number) + ".jpg", img_resize) 
+
 
 def gray_dectect() :
     files_path = DATA_DIR + "\\face_test\\pic_file\\"
@@ -125,7 +144,7 @@ def gray_dectect() :
     pic_file = os.listdir(files_path)
     face_size = 160
     for i in range(len(pic_file)) :
-        del_file(TEST_PIC_DIR)
+        #del_file(TEST_PIC_DIR)
         image_gray = cv2.imread(files_path + pic_file[i] , 0)
         image = cv2.imread(files_path + pic_file[i])
         cv2.imwrite(gray_path + pic_file[i],image_gray)
@@ -144,7 +163,6 @@ def gray_dectect() :
             keypoints = result['keypoints']
             number += 1
 
-        #cut out face
             img_blank = np.zeros((bounding_box[3], bounding_box[2], 3), np.uint8)
             img_resize = np.zeros((face_size,face_size,3),np.uint8)
             height = bounding_box[3]
@@ -155,7 +173,10 @@ def gray_dectect() :
                     img_blank[j][k] = image[bounding_box[1]+j][bounding_box[0]+k]
         
             img_resize = cv2.resize(img_blank,(face_size,face_size))
-            cv2.imwrite(TEST_PIC_DIR + str(number) + ".jpg",img_resize)
+            if number == 1 :
+                cv2.imwrite(TEST_PIC_DIR + pic_file[i], img_resize) 
+            else :
+                cv2.imwrite(TEST_PIC_DIR + pic_file[i][:-4] + "_" + str(number) + ".jpg", img_resize) 
         rect(image , results)
 
 def rect(image , results):
@@ -169,16 +190,18 @@ def rect(image , results):
     cv2.imwrite(DATA_DIR+'\\face_test\\rect_pic.jpg' , image)
 
 
-del_file(TEST_PIC_DIR)
-del_file(TEST_PKL_DIR)
+#del_file(TEST_PIC_DIR)
+#del_file(TEST_PKL_DIR)
+#del_file(LIB_WEIGH_DIR)
 detector = MTCNN()
-#image = cv2.imread(DATA_DIR+'\\face_test\\pic_file\\lib_1.jpg')
+image = cv2.imread(DATA_DIR+'\\face_test\\pic_file\\lib_1.jpg')
+split_slice_detect.printNum(detector,image)
 #split_slice_detect.detectSlice(image , detector , 3)
 ##method=0 : origin mtcnn   method=1 : split  method=2 : cut
 #with open(PROGRESS , 'w') as progress_file :
 #    progress_file.write("start\n")
 #single_face_add_lib()
-gray_dectect()
+#gray_dectect()
 ##test(0)
 ##test(1)
 #test(2)
@@ -188,7 +211,7 @@ gray_dectect()
 #addPklTest()            #complete pkl_file of test faces
 #unpresent=compare_result.compare()           #compare the pkl_file in lib and test
 #unpresent = compare_result.compare_weigh()
-#compare_result.compare_three()
 #compare_result.compare_normal_distribution_exclude()
+#compare_result.compare_three()
 #for i in unpresent:
 #    print(i)
